@@ -1,6 +1,5 @@
 package ru.proshkina.voteforlunch.repository;
 
-import ru.proshkina.voteforlunch.model.Restaraunt;
 import ru.proshkina.voteforlunch.model.Vote;
 
 import java.time.LocalDate;
@@ -21,5 +20,5 @@ public interface VoteRepository {
 
     List<Vote> getAll(LocalDate date);
 
-    List<Vote> getAllByRestaraunt(LocalDate date, int restaraunt_id);
+    List<Vote> getAllByRestaraunt(LocalDate date, int restaurant_id);
 }

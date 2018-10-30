@@ -1,20 +1,20 @@
 package ru.proshkina.voteforlunch.to;
 
-import ru.proshkina.voteforlunch.model.Restaraunt;
+import ru.proshkina.voteforlunch.model.Restaurant;
 
 public class VoteTo {
 
-    private final Restaraunt restaraunt;
+    private final Restaurant restaurant;
 
     private final int votesCount;
 
-    public VoteTo(Restaraunt restaraunt, int votesCount) {
-        this.restaraunt = restaraunt;
+    public VoteTo(Restaurant restaurant, int votesCount) {
+        this.restaurant = restaurant;
         this.votesCount = votesCount;
     }
 
-    public Restaraunt getRestaraunt() {
-        return restaraunt;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public int getVotesCount() {

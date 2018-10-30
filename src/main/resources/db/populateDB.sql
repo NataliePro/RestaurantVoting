@@ -1,7 +1,7 @@
 DELETE FROM user_roles;
 DELETE FROM dishes;
 DELETE FROM votes;
-DELETE FROM restaraunts;
+DELETE FROM restaurants;
 DELETE FROM users;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
@@ -15,18 +15,18 @@ INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 100000),
   ('ROLE_ADMIN', 100001);
 
-INSERT INTO restaraunts (name)
+INSERT INTO restaurants (name)
 VALUES  ('Ресторан1'),
         ('Ресторан2'),
         ('Ресторан3'),
         ('Ресторан4');
 
-INSERT INTO votes (date, time, user_id, restaraunt_id)
+INSERT INTO votes (date, time, user_id, restaurant_id)
 VALUES  ('2018-10-26', '10:00:00', 100000, 100004),
         ('2018-10-26', '09:00:00', 100001, 100006),
         ('2018-10-26', '10:30:00', 100002, 100004);
 
-INSERT INTO dishes (date, name, price, restaraunt_id)
+INSERT INTO dishes (date, name, price, restaurant_id)
 VALUES  ('2018-10-26', 'Блюдо1', 20000, 100004),
         ('2018-10-26', 'Блюдо2', 10000, 100006),
         ('2018-10-26', 'Блюдо3', 15000, 100005),

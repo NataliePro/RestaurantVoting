@@ -5,19 +5,19 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "restaraunts")
-public class Restaraunt extends AbstractNamedEntity {
+@Table(name = "restaurants")
+public class Restaurant extends AbstractNamedEntity {
 
-    public Restaraunt() {
+    public Restaurant() {
     }
 
-    public Restaraunt(Integer id, String name) {
+    public Restaurant(Integer id, String name) {
         super(id, name);
     }
 
     @Override
     public String toString() {
-        return "Restaraunt{" +
+        return "Restaurant{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 '}';

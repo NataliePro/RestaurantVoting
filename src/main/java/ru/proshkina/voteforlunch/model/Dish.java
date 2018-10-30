@@ -19,25 +19,25 @@ public class Dish extends AbstractNamedEntity {
     private Integer priceInCents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaraunt_id", nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
-    private Restaraunt restaraunt;
+    private Restaurant restaurant;
 
     public Dish() {
     }
 
-    public Dish(Integer id, String name, LocalDate date, Integer priceInCents, Restaraunt restaraunt) {
+    public Dish(Integer id, String name, LocalDate date, Integer priceInCents, Restaurant restaurant) {
         super(id, name);
         this.date = date;
         this.priceInCents = priceInCents;
-        this.restaraunt = restaraunt;
+        this.restaurant = restaurant;
     }
 
-    public Dish(String name, LocalDate date, Integer priceInCents, Restaraunt restaraunt) {
+    public Dish(String name, LocalDate date, Integer priceInCents, Restaurant restaurant) {
         super(null, name);
         this.date = date;
         this.priceInCents = priceInCents;
-        this.restaraunt = restaraunt;
+        this.restaurant = restaurant;
     }
 
     public LocalDate getDate() {
@@ -48,8 +48,8 @@ public class Dish extends AbstractNamedEntity {
         return priceInCents;
     }
 
-    public Restaraunt getRestaraunt() {
-        return restaraunt;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public void setDate(LocalDate date) {
@@ -60,8 +60,8 @@ public class Dish extends AbstractNamedEntity {
         this.priceInCents = priceInCents;
     }
 
-    public void setRestaraunt(Restaraunt restaraunt) {
-        this.restaraunt = restaraunt;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Dish extends AbstractNamedEntity {
         return "Dish{" +
                 "date=" + date +
                 ", priceInCents=" + priceInCents +
-                ", restaraunt=" + restaraunt +
+                ", restaurant=" + restaurant +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
