@@ -26,18 +26,16 @@ public class Dish extends AbstractNamedEntity {
     public Dish() {
     }
 
-    public Dish(Integer id, String name, LocalDate date, Integer priceInCents, Restaurant restaurant) {
+    public Dish(Integer id, String name, LocalDate date, Integer priceInCents) {
         super(id, name);
         this.date = date;
         this.priceInCents = priceInCents;
-        this.restaurant = restaurant;
     }
 
-    public Dish(String name, LocalDate date, Integer priceInCents, Restaurant restaurant) {
+    public Dish(String name, LocalDate date, Integer priceInCents) {
         super(null, name);
         this.date = date;
         this.priceInCents = priceInCents;
-        this.restaurant = restaurant;
     }
 
     public LocalDate getDate() {
@@ -69,7 +67,6 @@ public class Dish extends AbstractNamedEntity {
         return "Dish{" +
                 "date=" + date +
                 ", priceInCents=" + priceInCents +
-                ", restaurant=" + restaurant +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

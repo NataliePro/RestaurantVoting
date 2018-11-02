@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository;
+package ru.proshkina.voteforlunch.repository.user;
 
 import ru.proshkina.voteforlunch.model.User;
 

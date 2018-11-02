@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository;
+package ru.proshkina.voteforlunch.repository.dish;
 
 import ru.proshkina.voteforlunch.model.Dish;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DishRepository {
 
-    Dish save(Dish dish);
+    Dish save(Dish dish, Integer restaurant_id);
 
     // false if not found
     boolean delete(int id);
@@ -17,5 +17,5 @@ public interface DishRepository {
 
     List<Dish> getAll(LocalDate date);
 
-    List<Dish> getAllByRestaraunt(LocalDate date, int restaurant_id);
+    List<Dish> getAllByRestaraunt(LocalDate date, Integer restaurant_id);
 }
