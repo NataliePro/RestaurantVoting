@@ -2,7 +2,7 @@ package ru.proshkina.voteforlunch.repository.vote;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.proshkina.voteforlunch.model.Restaurant;
+import org.springframework.transaction.annotation.Transactional;
 import ru.proshkina.voteforlunch.model.User;
 import ru.proshkina.voteforlunch.model.Vote;
 import ru.proshkina.voteforlunch.repository.restaurant.CrudRestaurantRepository;
@@ -28,14 +28,13 @@ public class VoteRepositoryImpl implements VoteRepository {
     }
 
     @Override
-    public Vote save(Vote vote, Integer restaurant_id, Integer user_id) {
-        Restaurant restaurant = restaurantRepository.findById(restaurant_id).orElse(null);
+    @Transactional
+    public Vote save(Vote vote, int user_id) {
         User user = userRepository.findById(user_id).orElse(null);
-        if ((!vote.isNew() && getByUser(vote.getDate(), user_id) == null) || restaurant == null || user == null) {
+        Vote userVote = getByUser(vote.getDate(), user_id);
+        if (user == null || (!vote.isNew() && (userVote == null || vote.getUser().getId() != user_id))) {
             return null;
         }
-        //много запросов к бд (((( переделать
-        vote.setRestaurant(restaurant);
         vote.setUser(user);
         return voteRepository.save(vote);
     }
@@ -50,4 +49,13 @@ public class VoteRepositoryImpl implements VoteRepository {
         return voteRepository.findAllByDate(date);
     }
 
+    @Override
+    public boolean delete(int id) {
+        return voteRepository.delete(id) != 0;
+    }
+
+    @Override
+    public Vote get(int id) {
+        return voteRepository.findById(id).orElse(null);
+    }
 }

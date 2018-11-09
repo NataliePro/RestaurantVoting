@@ -20,6 +20,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public Restaurant save(Restaurant restaurant) {
+        if (!restaurant.isNew() && get(restaurant.getId()) == null) {
+            return null;
+        }
         return restaurantRepository.save(restaurant);
     }
 

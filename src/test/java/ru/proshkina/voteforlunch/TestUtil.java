@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository;
+package ru.proshkina.voteforlunch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

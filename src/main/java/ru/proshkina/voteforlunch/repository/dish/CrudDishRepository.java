@@ -20,7 +20,6 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     int delete(@Param("id") int id);
 
     @Override
-    @Transactional
     Dish save(Dish dish);
 
     @Override
@@ -30,5 +29,5 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     List<Dish> getAllByDate(@Param("date") LocalDate date);
 
     @Query("SELECT d FROM Dish d WHERE d.date=:date AND d.restaurant.id=:restaurant_id ORDER BY d.restaurant.id asc, d.priceInCents asc ")
-    List<Dish> getAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurant_id") Integer restaurant_id);
+    List<Dish> getAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurant_id") int restaurant_id);
 }

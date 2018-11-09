@@ -24,7 +24,7 @@ public class DishRepositoryImpl implements DishRepository {
 
     @Override
     @Transactional
-    public Dish save(Dish dish, Integer restaurant_id) {
+    public Dish save(Dish dish, int restaurant_id) {
         if (!dish.isNew() && get(dish.getId()) == null) {
             return null;
         }
@@ -48,7 +48,7 @@ public class DishRepositoryImpl implements DishRepository {
     }
 
     @Override
-    public List<Dish> getAllByRestaraunt(LocalDate date, Integer restaurant_id) {
+    public List<Dish> getAllByRestaurant(LocalDate date, int restaurant_id) {
         return dishRepository.getAllByDateAndRestaurant(date, restaurant_id);
     }
 }

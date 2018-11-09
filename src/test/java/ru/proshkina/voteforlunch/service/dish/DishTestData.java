@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository.dish;
+package ru.proshkina.voteforlunch.service.dish;
 
 import ru.proshkina.voteforlunch.model.Dish;
 
@@ -18,7 +18,15 @@ public class DishTestData {
     public static final Dish DISH9 = new Dish(DISH1_ID + 8, "Dish9", LocalDate.of(2018, 10, 26), 18000);
 
     public static final Integer RESTAURANT1_ID = 100004;
+    public static final Integer RESTAURANT2_ID = 100005;
 
     public static final LocalDate TEST_DATE = LocalDate.of(2018, 10, 26);
 
+    public static Dish getUpdated() {
+        return new Dish(DISH1_ID, "updated dish", TEST_DATE, 2500);
+    }
+
+    public static Dish getCreated() {
+        return new Dish(null, "Блюдо111", LocalDate.of(2018, 10, 26), 21000);
+    }
 }

@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository.restaurant;
+package ru.proshkina.voteforlunch.service.restaurant;
 
 import ru.proshkina.voteforlunch.model.Restaurant;
 
