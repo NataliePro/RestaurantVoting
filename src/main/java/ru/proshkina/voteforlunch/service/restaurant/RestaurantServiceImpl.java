@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 import ru.proshkina.voteforlunch.model.Restaurant;
 import ru.proshkina.voteforlunch.repository.restaurant.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.proshkina.voteforlunch.util.ValidationUtil.checkNotFoundWithId;
@@ -43,5 +44,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public List<Restaurant> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public List<Restaurant> getAllWithDishes(LocalDate date) {
+        Assert.notNull(date, "date must not be null");
+        return repository.getAllWithDishes(date);
     }
 }

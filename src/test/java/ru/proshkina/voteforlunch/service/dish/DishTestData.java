@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class DishTestData {
 
-    public static final Integer DISH1_ID = 100011;
+    public static final Integer DISH1_ID = 100013;
     public static final Dish DISH1 = new Dish(DISH1_ID, "Dish1", LocalDate.of(2018, 10, 26), 20000);
     public static final Dish DISH2 = new Dish(DISH1_ID + 1, "Dish2", LocalDate.of(2018, 10, 26), 10000);
     public static final Dish DISH3 = new Dish(DISH1_ID + 2, "Dish3", LocalDate.of(2018, 10, 26), 15000);

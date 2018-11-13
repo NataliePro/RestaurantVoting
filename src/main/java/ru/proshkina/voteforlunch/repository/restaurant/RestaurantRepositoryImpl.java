@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.proshkina.voteforlunch.model.Restaurant;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -39,5 +40,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
     @Override
     public List<Restaurant> getAll() {
         return restaurantRepository.findAll(SORT_ID);
+    }
+
+    @Override
+    public List<Restaurant> getAllWithDishes(LocalDate date) {
+        return restaurantRepository.findAllByDishes_DateOrDishesIsNullOrderById(date);
     }
 }

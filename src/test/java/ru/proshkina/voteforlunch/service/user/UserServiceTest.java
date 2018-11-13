@@ -5,11 +5,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
+import ru.proshkina.voteforlunch.AbstractServiceTest;
 import ru.proshkina.voteforlunch.model.Role;
 import ru.proshkina.voteforlunch.model.User;
-import ru.proshkina.voteforlunch.AbstractServiceTest;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static ru.proshkina.voteforlunch.TestUtil.assertMatch;
@@ -33,7 +34,7 @@ public class UserServiceTest extends AbstractServiceTest {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         User created = service.create(newUser);
         newUser.setId(created.getId());
-        assertMatch(service.getAll(), List.of(ADMIN, newUser, USER, USER2, USER3), "registered", "roles");
+        assertMatch(service.getAll(), List.of(ADMIN, newUser, USER, USER2, USER3), "registered", "roles", "votes");
     }
 
     @Test(expected = DataAccessException.class)
@@ -44,7 +45,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertMatch(service.getAll(), List.of(ADMIN, USER2, USER3), "registered", "roles");
+        assertMatch(service.getAll(), List.of(ADMIN, USER2, USER3), "registered", "roles", "votes");
     }
 
     @Test(expected = NotFoundException.class)
@@ -55,7 +56,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void get() throws Exception {
         User user = service.get(USER_ID);
-        assertMatch(user, USER, "registered", "roles");
+        assertMatch(user, USER, "registered", "roles", "votes");
     }
 
     @Test(expected = NotFoundException.class)
@@ -66,7 +67,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void getByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER, "registered", "roles");
+        assertMatch(user, USER, "registered", "roles", "votes");
     }
 
     @Test
@@ -74,13 +75,20 @@ public class UserServiceTest extends AbstractServiceTest {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated, "registered", "roles");
+        assertMatch(service.get(USER_ID), updated, "registered", "roles", "votes");
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, List.of(ADMIN, USER, USER2,USER3), "registered", "roles");
+        assertMatch(all, List.of(ADMIN, USER, USER2, USER3), "registered", "roles", "votes");
+    }
+
+    @Test
+    public void testValidation() throws Exception {
+        validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
     }
 
 }

@@ -6,6 +6,7 @@ import ru.proshkina.voteforlunch.AbstractServiceTest;
 import ru.proshkina.voteforlunch.model.Dish;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static ru.proshkina.voteforlunch.TestUtil.assertMatch;
@@ -39,7 +40,6 @@ public class DishServiceTest extends AbstractServiceTest {
     public void delete() {
         service.delete(DISH1_ID);
         assertMatch(service.getAll(TEST_DATE), List.of(DISH8, DISH3, DISH6, DISH7, DISH2, DISH4, DISH5, DISH9), "restaurant");
-
     }
 
     @Test
@@ -73,4 +73,11 @@ public class DishServiceTest extends AbstractServiceTest {
         assertMatch(service.getAllByRestaurant(TEST_DATE, RESTAURANT1_ID), List.of(DISH1, DISH8), "restaurant");
     }
 
+    @Test
+    public void testValidation() throws Exception {
+        validateRootCause(() -> service.create(new Dish(null, " ", TEST_DATE, 10000), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "Disssh", null, 10000), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "Disssh", TEST_DATE, 1), RESTAURANT1_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Dish(null, "Disssh", TEST_DATE, 10000000), RESTAURANT1_ID), ConstraintViolationException.class);
+    }
 }

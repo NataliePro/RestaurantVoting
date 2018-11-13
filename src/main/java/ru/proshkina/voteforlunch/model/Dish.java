@@ -15,7 +15,7 @@ public class Dish extends AbstractNamedEntity {
     private LocalDate date;
 
     @Column(name = "price", nullable = false, columnDefinition = "int")
-    @Range(min = 0, max = 1000000)
+    @Range(min = 10, max = 1000000)
     private Integer priceInCents;
 
     @ManyToOne(fetch = FetchType.LAZY)

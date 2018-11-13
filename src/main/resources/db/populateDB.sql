@@ -14,17 +14,21 @@ INSERT INTO users (name, email, password) VALUES
 
 INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 100000),
-  ('ROLE_ADMIN', 100001);
+  ('ROLE_USER', 100001),
+  ('ROLE_USER', 100002),
+  ('ROLE_ADMIN', 100003);
 
 INSERT INTO restaurants (name)
 VALUES ('Restaurant1'),
   ('Restaurant2'),
   ('Restaurant3'),
-  ('Restaurant4');
+  ('Restaurant4'),
+  ('Restaurant5');
 
 INSERT INTO votes (date, time, user_id, restaurant_id)
 VALUES ('2018-10-26', '10:00:00', 100000, 100004),
   ('2018-10-26', '09:00:00', 100001, 100006),
+  ('2018-10-25', '09:00:00', 100001, 100004),
   ('2018-10-26', '10:30:00', 100002, 100004);
 
 INSERT INTO dishes (date, name, price, restaurant_id)
@@ -36,4 +40,5 @@ VALUES ('2018-10-26', 'Dish1', 20000, 100004),
   ('2018-10-26', 'Dish6', 17000, 100005),
   ('2018-10-26', 'Dish7', 20000, 100005),
   ('2018-10-26', 'Dish8', 22000, 100004),
-  ('2018-10-26', 'Dish9', 18000, 100007);
+  ('2018-10-26', 'Dish9', 18000, 100007),
+  ('2018-10-25', 'Dish10', 22000, 100004);

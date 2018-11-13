@@ -25,9 +25,7 @@ public interface CrudDishRepository extends JpaRepository<Dish, Integer> {
     @Override
     Optional<Dish> findById(Integer id);
 
-    @Query("SELECT d FROM Dish d WHERE d.date=:date ORDER BY d.restaurant.id asc, d.priceInCents asc ")
-    List<Dish> getAllByDate(@Param("date") LocalDate date);
+    List<Dish> findAllByDateOrderByRestaurantIdAscPriceInCentsAsc(@Param("date") LocalDate date);
 
-    @Query("SELECT d FROM Dish d WHERE d.date=:date AND d.restaurant.id=:restaurant_id ORDER BY d.restaurant.id asc, d.priceInCents asc ")
-    List<Dish> getAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurant_id") int restaurant_id);
+    List<Dish> findAllByDateAndRestaurant_IdOrderByRestaurantIdAscPriceInCentsAsc(@Param("date") LocalDate date, @Param("restaurant_id") int restaurant_id);
 }

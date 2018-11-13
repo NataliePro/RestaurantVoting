@@ -1,5 +1,6 @@
 package ru.proshkina.voteforlunch.repository.vote;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,13 +16,14 @@ import java.util.Optional;
 public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
 
     @Override
+    @Transactional
     Vote save(Vote vote);
 
-    @Query("SELECT v FROM Vote v JOIN FETCH v.user JOIN FETCH v.restaurant WHERE v.date=:date AND v.user.id=:user_id")
-    Vote findByDateAndUser(@Param("date") LocalDate date, @Param("user_id") Integer user_id);
+    @EntityGraph(attributePaths = {"user", "restaurant"})
+    Vote findAllByDateAndUser_Id(@Param("date") LocalDate date, @Param("user_id") Integer user_id);
 
-    @Query("SELECT v FROM Vote v JOIN FETCH v.user JOIN FETCH v.restaurant WHERE v.date=:date ORDER BY v.date, v.time ")
-    List<Vote> findAllByDate(@Param("date") LocalDate date);
+    @EntityGraph(attributePaths = {"user", "restaurant"})
+    List<Vote> findAllByDateOrderByTimeAsc(@Param("date") LocalDate date);
 
     @Transactional
     @Modifying

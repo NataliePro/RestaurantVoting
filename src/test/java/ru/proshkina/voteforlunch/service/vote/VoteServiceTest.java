@@ -6,6 +6,7 @@ import ru.proshkina.voteforlunch.AbstractServiceTest;
 import ru.proshkina.voteforlunch.model.Vote;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,16 +26,14 @@ public class VoteServiceTest extends AbstractServiceTest {
         Vote newVote = new Vote(null, LocalDate.of(2018, 10, 26), LocalTime.of(8, 0, 0), USER, RESTAURANT4);
         Vote createdVote = service.create(newVote, ADMIN_ID);
         newVote.setId(createdVote.getId());
-        newVote.setUser(createdVote.getUser());
-        newVote.setRestaurant(createdVote.getRestaurant());
-        assertMatch(service.getAll(TEST_DATE), List.of(newVote, VOTE2, VOTE, VOTE3));
+        assertMatch(service.getAll(TEST_DATE), List.of(newVote, VOTE2, VOTE, VOTE3), "user", "restaurant");
     }
 
     @Test
     public void update() {
         Vote updated = getUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3, updated));
+        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3, updated), "user", "restaurant");
     }
 
     @Test
@@ -47,7 +46,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         service.delete(VOTE_ID);
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3));
+        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3), "user", "restaurant");
     }
 
     @Test
@@ -69,7 +68,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     public void getByUser() {
-        assertMatch(service.getByUser(TEST_DATE, USER_ID), VOTE);
+        assertMatch(service.getByUser(TEST_DATE, USER_ID), VOTE, "user", "restaurant");
     }
 
     @Test
@@ -80,6 +79,12 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     public void getAll() {
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE, VOTE3));
+        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE, VOTE3), "user", "restaurant");
+    }
+
+    @Test
+    public void testValidation() throws Exception {
+        validateRootCause(() -> service.create(new Vote(null, null, LocalTime.MAX), USER_ID), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new Vote(null, TEST_DATE, null), USER_ID), ConstraintViolationException.class);
     }
 }
