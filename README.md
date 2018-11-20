@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f9504e4f58e4dd78202602a46d72fcc)](https://app.codacy.com/app/nataliepro/voteforlunch)
+
 # VoteForLunch
 REST API: Hibernate/Spring/SpringMVC **without frontend**.
 

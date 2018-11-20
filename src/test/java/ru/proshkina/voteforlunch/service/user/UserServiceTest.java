@@ -34,7 +34,7 @@ public class UserServiceTest extends AbstractServiceTest {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         User created = service.create(newUser);
         newUser.setId(created.getId());
-        assertMatch(service.getAll(), List.of(ADMIN, newUser, USER, USER2, USER3), "registered", "roles", "votes");
+        assertMatch(service.getAll(), List.of(ADMIN, newUser, USER, USER2, USER3), "registered", "votes");
     }
 
     @Test(expected = DataAccessException.class)
@@ -45,7 +45,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertMatch(service.getAll(), List.of(ADMIN, USER2, USER3), "registered", "roles", "votes");
+        assertMatch(service.getAll(), List.of(ADMIN, USER2, USER3), "registered", "votes");
     }
 
     @Test(expected = NotFoundException.class)
@@ -56,7 +56,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void get() throws Exception {
         User user = service.get(USER_ID);
-        assertMatch(user, USER, "registered", "roles", "votes");
+        assertMatch(user, USER, "registered", "votes");
     }
 
     @Test(expected = NotFoundException.class)
@@ -67,7 +67,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void getByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER, "registered", "roles", "votes");
+        assertMatch(user, USER, "registered", "votes");
     }
 
     @Test
@@ -75,13 +75,13 @@ public class UserServiceTest extends AbstractServiceTest {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated, "registered", "roles", "votes");
+        assertMatch(service.get(USER_ID), updated, "registered", "votes");
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, List.of(ADMIN, USER, USER2, USER3), "registered", "roles", "votes");
+        assertMatch(all, List.of(ADMIN, USER, USER2, USER3), "registered", "votes");
     }
 
     @Test
