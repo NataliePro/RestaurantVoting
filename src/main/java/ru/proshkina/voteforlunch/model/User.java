@@ -1,7 +1,9 @@
 package ru.proshkina.voteforlunch.model;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.util.CollectionUtils;
+import ru.proshkina.voteforlunch.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -27,6 +29,7 @@ public class User extends AbstractNamedEntity {
     @Email
     @NotBlank
     @Size(max = 100)
+    @SafeHtml(groups = {View.Web.class})  // https://stackoverflow.com/questions/17480809
     private String email;
 
     @Column(name = "password", nullable = false)

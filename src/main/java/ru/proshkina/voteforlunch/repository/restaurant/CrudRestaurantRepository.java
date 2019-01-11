@@ -32,6 +32,6 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
     int delete(@Param("id") int id);
 
     @EntityGraph(attributePaths = {"dishes"})
-    List<Restaurant> findAllByDishes_DateOrDishesIsNullOrderById(@Param("date") LocalDate date);
+    List<Restaurant> findAllByDishes_DateOrderById(@Param("date") LocalDate date);
 
 }

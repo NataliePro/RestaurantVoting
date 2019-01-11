@@ -12,6 +12,7 @@
        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <import resource="spring-tools.xml"/>
+    <import resource="spring-security.xml"/>
 
     <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
@@ -55,5 +56,7 @@
     <!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
+
+    <bean class="ru.proshkina.voteforlunch.DateTimeFactory" name="timeFactory"/>
 
 </beans>

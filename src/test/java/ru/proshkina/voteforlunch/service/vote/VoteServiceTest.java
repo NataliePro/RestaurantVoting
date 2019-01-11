@@ -1,19 +1,26 @@
 package ru.proshkina.voteforlunch.service.vote;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.proshkina.voteforlunch.AbstractServiceTest;
+import ru.proshkina.voteforlunch.DateTimeFactory;
 import ru.proshkina.voteforlunch.model.Vote;
+import ru.proshkina.voteforlunch.repository.vote.VoteRepositoryImpl;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
+import ru.proshkina.voteforlunch.util.exception.VotingTimeIsOutException;
 
-import javax.validation.ConstraintViolationException;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
-import static ru.proshkina.voteforlunch.TestUtil.assertMatch;
-import static ru.proshkina.voteforlunch.service.restaurant.RestaurantTestData.RESTAURANT4;
-import static ru.proshkina.voteforlunch.service.user.UserTestData.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static ru.proshkina.voteforlunch.service.restaurant.RestaurantTestData.RESTAURANT1_ID;
+import static ru.proshkina.voteforlunch.service.user.UserTestData.ADMIN_ID;
+import static ru.proshkina.voteforlunch.service.user.UserTestData.USER_ID;
 import static ru.proshkina.voteforlunch.service.vote.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -21,70 +28,104 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Autowired
     private VoteService service;
 
-    @Test
-    public void create() {
-        Vote newVote = new Vote(null, LocalDate.of(2018, 10, 26), LocalTime.of(8, 0, 0), USER, RESTAURANT4);
-        Vote createdVote = service.create(newVote, ADMIN_ID);
-        newVote.setId(createdVote.getId());
-        assertMatch(service.getAll(TEST_DATE), List.of(newVote, VOTE2, VOTE, VOTE3), "user", "restaurant");
+    @Mock
+    private DateTimeFactory timeFactory;
+
+    @Mock
+    private VoteRepositoryImpl mockRepository;
+
+    @InjectMocks
+    private VoteServiceImpl mockService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void update() {
-        Vote updated = getUpdated();
-        service.update(updated, USER_ID);
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3, updated), "user", "restaurant");
+    void testCreateBeforeTimeLimit() {
+        Vote newVote = new Vote(null, TEST_DATE, LocalTime.of(8, 0, 0));
+        when(timeFactory.getCurrentTime()).thenReturn(TEST_TIME_BEFORE_LIMIT);
+        when(timeFactory.getCurrentDate()).thenReturn(TEST_DATE);
+        when(timeFactory.getTimeLimit()).thenReturn(TEST_TIME_LIMIT);
+        when(mockRepository.save(newVote, ADMIN_ID, RESTAURANT1_ID)).thenReturn(newVote);
+        Vote createdVote = mockService.create(newVote, ADMIN_ID, RESTAURANT1_ID);
+        assertMatch(createdVote, newVote);
+        verify(mockRepository).save(newVote, ADMIN_ID, RESTAURANT1_ID);
     }
 
     @Test
-    public void updateNotFoundUser() {
-        thrown.expect(NotFoundException.class);
-        Vote updated = getUpdated();
-        service.update(updated, ADMIN_ID);
+    void testCreateAfterTimeLimit() {
+        Vote newVote = new Vote(null, TEST_DATE, LocalTime.of(8, 0, 0));
+        when(timeFactory.getCurrentTime()).thenReturn(TEST_TIME_AFTER_LIMIT);
+        when(timeFactory.getCurrentDate()).thenReturn(TEST_DATE);
+        when(timeFactory.getTimeLimit()).thenReturn(TEST_TIME_LIMIT);
+        assertThrows(VotingTimeIsOutException.class, () ->
+                mockService.create(newVote, ADMIN_ID, RESTAURANT1_ID));
     }
 
     @Test
-    public void delete() {
-        service.delete(VOTE_ID);
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE3), "user", "restaurant");
+    void testDelete() {
+        service.delete(VOTE_ID, USER_ID);
+        assertMatch(service.getAllByDate(TEST_DATE), VOTE2, VOTE4);
     }
 
     @Test
-    public void deleteNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.delete(123);
+    void testDeleteNotFound() {
+        assertThrows(NotFoundException.class, () ->
+                service.delete(123, USER_ID));
     }
 
     @Test
-    public void get() {
-        assertMatch(service.get(VOTE_ID), VOTE, "user", "restaurant");
+    void testGetNotFound() {
+        assertThrows(NotFoundException.class, () ->
+                service.get(123, USER_ID));
     }
 
     @Test
-    public void getNotFound() {
-        thrown.expect(NotFoundException.class);
-        service.get(123);
+    void testGetByUserAndDate() {
+        assertMatch(service.getByUserAndDate(USER_ID, TEST_DATE), VOTE);
     }
 
     @Test
-    public void getByUser() {
-        assertMatch(service.getByUser(TEST_DATE, USER_ID), VOTE, "user", "restaurant");
+    void testGetByNotFoundUser() {
+        assertThrows(NotFoundException.class, () ->
+                service.getByUserAndDate(123, TEST_DATE));
     }
 
     @Test
-    public void getByNotFoundUser() {
-        thrown.expect(NotFoundException.class);
-        service.getByUser(TEST_DATE, 123);
+    void testGetAll() {
+        assertMatch(service.getAll(), VOTE3, VOTE2, VOTE, VOTE4);
     }
 
     @Test
-    public void getAll() {
-        assertMatch(service.getAll(TEST_DATE), List.of(VOTE2, VOTE, VOTE3), "user", "restaurant");
+    void testGetAllByDate() {
+        assertMatch(service.getAllByDate(TEST_DATE), VOTE2, VOTE, VOTE4);
     }
 
     @Test
-    public void testValidation() throws Exception {
-        validateRootCause(() -> service.create(new Vote(null, null, LocalTime.MAX), USER_ID), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new Vote(null, TEST_DATE, null), USER_ID), ConstraintViolationException.class);
+    void testGetAllByUser() {
+        assertMatch(service.getAllByUser(USER_ID), VOTE3, VOTE);
     }
+
+    @Test
+    void testGetAllByRestaurant() {
+        assertMatch(service.getAllByRestaurant(RESTAURANT1_ID), VOTE3, VOTE, VOTE4);
+    }
+
+    @Test
+    void testGetAllByRestaurantAndUser() {
+        assertMatch(service.getAllByRestaurantAndUser(RESTAURANT1_ID, USER_ID), VOTE3, VOTE);
+    }
+
+    @Test
+    void testGetAllByRestaurantAndDate() {
+        assertMatch(service.getAllByRestaurantAndDate(RESTAURANT1_ID, TEST_DATE), VOTE, VOTE4);
+    }
+
+    @Test
+    void testGetByRestaurantAndDateAndUser() {
+        assertMatch(service.getByRestaurantAndDateAndUser(RESTAURANT1_ID, TEST_DATE, USER_ID), VOTE);
+    }
+
 }

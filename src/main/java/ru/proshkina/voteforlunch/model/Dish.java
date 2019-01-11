@@ -1,5 +1,6 @@
 package ru.proshkina.voteforlunch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -15,9 +16,10 @@ public class Dish extends AbstractNamedEntity {
     private LocalDate date;
 
     @Column(name = "price", nullable = false, columnDefinition = "int")
-    @Range(min = 10, max = 1000000)
+    @Range(min = 10, max = 1000000, message = "price in cents must be between 100 and 100000")
     private Integer priceInCents;
 
+    @JsonIgnoreProperties("dishes")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
@@ -36,6 +38,10 @@ public class Dish extends AbstractNamedEntity {
         super(null, name);
         this.date = date;
         this.priceInCents = priceInCents;
+    }
+
+    public Dish(Dish dish) {
+        this(dish.getId(), dish.getName(), dish.getDate(), dish.getPriceInCents());
     }
 
     public LocalDate getDate() {

@@ -1,16 +1,21 @@
 package ru.proshkina.voteforlunch.util;
 
 
+import org.slf4j.Logger;
+import ru.proshkina.voteforlunch.HasId;
 import ru.proshkina.voteforlunch.model.AbstractBaseEntity;
+import ru.proshkina.voteforlunch.util.exception.ErrorType;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ValidationUtil {
 
-    public static <T> T checkNotFoundWithId(T object, int id) {
-        return checkNotFound(object, "id=" + id);
+    private ValidationUtil() {
     }
 
-    private ValidationUtil() {
+    public static <T> T checkNotFoundWithId(T object, int id) {
+        return checkNotFound(object, "id=" + id);
     }
 
     public static void checkNotFoundWithId(boolean found, int id) {
@@ -34,18 +39,18 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNotNew(AbstractBaseEntity entity) {
-        if (entity.isNew()) {
-            throw new IllegalArgumentException(entity + " must not be new (id!=null)");
+    public static void checkNew(HasId bean) {
+        if (!bean.isNew()) {
+            throw new IllegalArgumentException(bean + " must be new (id=null)");
         }
     }
 
-    public static void assureIdConsistent(AbstractBaseEntity entity, int id) {
+    public static void assureIdConsistent(HasId bean, int id) {
 //      http://stackoverflow.com/a/32728226/548473
-        if (entity.isNew()) {
-            entity.setId(id);
-        } else if (entity.getId() != id) {
-            throw new IllegalArgumentException(entity + " must be with id=" + id);
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.getId() != id) {
+            throw new IllegalArgumentException(bean + " must be with id=" + id);
         }
     }
 
@@ -58,5 +63,19 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
+
+    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        if (logException) {
+            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+        } else {
+            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+        }
+        return rootCause;
     }
 }

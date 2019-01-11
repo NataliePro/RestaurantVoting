@@ -1,5 +1,7 @@
 package ru.proshkina.voteforlunch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +10,14 @@ import java.util.Set;
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
+    @JsonIgnoreProperties("restaurant")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OrderBy("priceInCents ASC ")
+    protected Set<Dish> dishes;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    protected List<Vote> votes;
+
     public Restaurant() {
     }
 
@@ -15,12 +25,9 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("priceInCents ASC ")
-    protected Set<Dish> dishes;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    protected List<Vote> votes;
+    public Restaurant(Restaurant restaurant) {
+        this(restaurant.getId(), restaurant.getName());
+    }
 
     public Set<Dish> getDishes() {
         return dishes;

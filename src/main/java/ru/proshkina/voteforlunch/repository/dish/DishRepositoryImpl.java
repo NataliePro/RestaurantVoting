@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.proshkina.voteforlunch.model.Dish;
-import ru.proshkina.voteforlunch.model.Restaurant;
 import ru.proshkina.voteforlunch.repository.restaurant.CrudRestaurantRepository;
 
 import java.time.LocalDate;
@@ -26,7 +25,7 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public Dish save(Dish dish, int restaurant_id) {
-        if (!dish.isNew() && get(dish.getId()) == null) {
+        if (!dish.isNew() && get(dish.getId(), restaurant_id) == null) {
             return null;
         }
         dish.setRestaurant(restaurantRepository.getOne(restaurant_id));
@@ -34,22 +33,32 @@ public class DishRepositoryImpl implements DishRepository {
     }
 
     @Override
-    public boolean delete(int id) {
-        return dishRepository.delete(id) != 0;
+    public boolean delete(int id, int restaurant_id) {
+        return dishRepository.delete(id, restaurant_id) != 0;
     }
 
     @Override
-    public Dish get(int id) {
-        return dishRepository.findById(id).orElse(null);
+    public Dish get(int id, int restaurant_id) {
+        return dishRepository.findById(id).filter(dish -> dish.getRestaurant().getId() == restaurant_id).orElse(null);
     }
 
     @Override
-    public List<Dish> getAll(LocalDate date) {
+    public List<Dish> getAll() {
+        return dishRepository.findAll();
+    }
+
+    @Override
+    public List<Dish> getAllByDate(LocalDate date) {
         return dishRepository.findAllByDateOrderByRestaurantIdAscPriceInCentsAsc(date);
     }
 
     @Override
-    public List<Dish> getAllByRestaurant(LocalDate date, int restaurant_id) {
+    public List<Dish> getAllByRestaurantAndDate(int restaurant_id, LocalDate date) {
         return dishRepository.findAllByDateAndRestaurant_IdOrderByRestaurantIdAscPriceInCentsAsc(date, restaurant_id);
+    }
+
+    @Override
+    public List<Dish> getAllByRestaurant(int restaurant_id) {
+        return dishRepository.findAllByRestaurant_IdOrderByDateAscRestaurantIdAscPriceInCentsAsc(restaurant_id);
     }
 }

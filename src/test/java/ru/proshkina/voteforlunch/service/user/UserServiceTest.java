@@ -1,7 +1,7 @@
 package ru.proshkina.voteforlunch.service.user;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
@@ -13,7 +13,7 @@ import ru.proshkina.voteforlunch.util.exception.NotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import static ru.proshkina.voteforlunch.TestUtil.assertMatch;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.proshkina.voteforlunch.service.user.UserTestData.*;
 
 public class UserServiceTest extends AbstractServiceTest {
@@ -24,71 +24,74 @@ public class UserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         cacheManager.getCache("users").clear();
     }
 
     @Test
-    public void create() throws Exception {
+    void testCreate() throws Exception {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         User created = service.create(newUser);
         newUser.setId(created.getId());
-        assertMatch(service.getAll(), List.of(ADMIN, newUser, USER, USER2, USER3), "registered", "votes");
-    }
-
-    @Test(expected = DataAccessException.class)
-    public void duplicateMailCreate() throws Exception {
-        service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+        assertMatch(service.getAll(), ADMIN, newUser, USER, USER2, USER3);
     }
 
     @Test
-    public void delete() throws Exception {
+    void testDuplicateMailCreate() throws Exception {
+        assertThrows(DataAccessException.class, () ->
+                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER)));
+    }
+
+    @Test
+    void testDelete() throws Exception {
         service.delete(USER_ID);
-        assertMatch(service.getAll(), List.of(ADMIN, USER2, USER3), "registered", "votes");
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void deletedNotFound() throws Exception {
-        service.delete(1);
+        assertMatch(service.getAll(), ADMIN, USER2, USER3);
     }
 
     @Test
-    public void get() throws Exception {
+    void testDeletedNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.delete(1));
+    }
+
+    @Test
+    void testGet() throws Exception {
         User user = service.get(USER_ID);
-        assertMatch(user, USER, "registered", "votes");
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void getNotFound() throws Exception {
-        service.get(1);
+        assertMatch(user, USER);
     }
 
     @Test
-    public void getByEmail() throws Exception {
+    void testGetNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () ->
+                service.get(1));
+    }
+
+    @Test
+    void testGetByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
-        assertMatch(user, USER, "registered", "votes");
+        assertMatch(user, USER);
     }
 
     @Test
-    public void update() throws Exception {
+    void testUpdate() throws Exception {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated, "registered", "votes");
+        assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
-    public void getAll() throws Exception {
+    void testGetAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, List.of(ADMIN, USER, USER2, USER3), "registered", "votes");
+        assertMatch(all, ADMIN, USER, USER2, USER3);
     }
 
     @Test
-    public void testValidation() throws Exception {
+    void testValidation() throws Exception {
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", " ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "", Role.ROLE_USER)), ConstraintViolationException.class);
     }
 
 }

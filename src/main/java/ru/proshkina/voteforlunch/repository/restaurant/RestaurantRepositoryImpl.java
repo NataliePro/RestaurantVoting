@@ -44,6 +44,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepository {
 
     @Override
     public List<Restaurant> getAllWithDishes(LocalDate date) {
-        return restaurantRepository.findAllByDishes_DateOrDishesIsNullOrderById(date);
+        return restaurantRepository.findAllByDishes_DateOrderById(date);
     }
 }

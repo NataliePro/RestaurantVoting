@@ -1,6 +1,7 @@
 package ru.proshkina.voteforlunch.service.restaurant;
 
 import ru.proshkina.voteforlunch.model.Restaurant;
+import ru.proshkina.voteforlunch.to.RestaurantTo;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,5 +18,7 @@ public interface RestaurantService {
 
     List<Restaurant> getAll();
 
-    List<Restaurant> getAllWithDishes(LocalDate date);
+    List<Restaurant> getAllWithDishesByDate(LocalDate date);
+
+    List<RestaurantTo> getAllWithVotesByDate(LocalDate date);
 }

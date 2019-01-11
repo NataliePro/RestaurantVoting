@@ -14,7 +14,7 @@ import static ru.proshkina.voteforlunch.util.ValidationUtil.*;
 @Service
 public class DishServiceImpl implements DishService {
 
-    private DishRepository dishRepository;
+    private final DishRepository dishRepository;
 
     public DishServiceImpl(DishRepository dishRepository, RestaurantRepository restaurantRepository) {
         this.dishRepository = dishRepository;
@@ -28,31 +28,40 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish get(int id) {
-        return checkNotFoundWithId(dishRepository.get(id), id);
+    public Dish get(int id, int restaurant_id) {
+        return checkNotFoundWithId(dishRepository.get(id, restaurant_id), id);
     }
 
     @Override
-    public void delete(int id) {
-        checkNotFoundWithId(dishRepository.delete(id), id);
+    public void delete(int id, int restaurant_id) {
+        checkNotFoundWithId(dishRepository.delete(id, restaurant_id), id);
     }
 
     @Override
     public void update(Dish dish, int restaurant_id) {
         Assert.notNull(dish, "dish must not be null");
-        checkNotNew(dish);
         checkNotFoundWithId(dishRepository.save(dish, restaurant_id), dish.getId());
     }
 
     @Override
-    public List<Dish> getAll(LocalDate date) {
-        Assert.notNull(date, "date must not be null");
-        return dishRepository.getAll(date);
+    public List<Dish> getAll() {
+        return dishRepository.getAll();
     }
 
     @Override
-    public List<Dish> getAllByRestaurant(LocalDate date, int restaurant_id) {
+    public List<Dish> getAllForDate(LocalDate date) {
         Assert.notNull(date, "date must not be null");
-        return dishRepository.getAllByRestaurant(date, restaurant_id);
+        return dishRepository.getAllByDate(date);
+    }
+
+    @Override
+    public List<Dish> getAllByRestaurantAndDate(int restaurant_id, LocalDate date) {
+        Assert.notNull(date, "date must not be null");
+        return dishRepository.getAllByRestaurantAndDate(restaurant_id, date);
+    }
+
+    @Override
+    public List<Dish> getAllByRestaurant(int restaurant_id) {
+        return dishRepository.getAllByRestaurant(restaurant_id);
     }
 }

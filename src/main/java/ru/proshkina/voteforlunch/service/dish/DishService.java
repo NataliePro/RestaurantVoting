@@ -9,13 +9,17 @@ public interface DishService {
 
     Dish create(Dish dish, int restaurant_id);
 
-    Dish get(int id);
+    Dish get(int id, int restaurant_id);
 
-    void delete(int id);
+    void delete(int id, int restaurant_id);
 
     void update(Dish dish, int restaurant_id);
 
-    List<Dish> getAll(LocalDate date);
+    List<Dish> getAll();
 
-    List<Dish> getAllByRestaurant(LocalDate date, int restaurant);
+    List<Dish> getAllForDate(LocalDate date);
+
+    List<Dish> getAllByRestaurant(int restaurant_id);
+
+    List<Dish> getAllByRestaurantAndDate(int restaurant_id, LocalDate date);
 }

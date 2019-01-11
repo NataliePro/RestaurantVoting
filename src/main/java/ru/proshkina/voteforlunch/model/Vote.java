@@ -1,5 +1,7 @@
 package ru.proshkina.voteforlunch.model;
 
+import ru.proshkina.voteforlunch.View;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -8,6 +10,24 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
 public class Vote extends AbstractBaseEntity {
+
+    @Column(name = "date", nullable = false)
+    @NotNull
+    private LocalDate date;
+
+    @Column(name = "time", nullable = false)
+    @NotNull
+    private LocalTime time;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(groups = View.Persist.class)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @NotNull(groups = View.Persist.class)
+    private Restaurant restaurant;
 
     public Vote() {
     }
@@ -26,23 +46,9 @@ public class Vote extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    @Column(name = "date", nullable = false)
-    @NotNull
-    private LocalDate date;
-
-    @Column(name = "time", nullable = false)
-    @NotNull
-    private LocalTime time;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @NotNull
-    private Restaurant restaurant;
+    public Vote(Vote vote) {
+        this(vote.getId(), vote.getDate(), vote.getTime(), vote.getUser(), vote.getRestaurant());
+    }
 
     public LocalDate getDate() {
         return date;
@@ -81,8 +87,7 @@ public class Vote extends AbstractBaseEntity {
         return "Vote{" +
                 "date=" + date +
                 ", time=" + time +
-                ", user=" + user +
-                ", restaurant=" + restaurant +
+                ", id=" + id +
                 '}';
     }
 }
