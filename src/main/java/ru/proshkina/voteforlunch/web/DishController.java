@@ -22,7 +22,7 @@ import static ru.proshkina.voteforlunch.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishController {
-    static final String REST_URL = "/api/admin/restaurants";
+    static final String REST_URL = "/rest/admin/restaurants";
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private DishService service;

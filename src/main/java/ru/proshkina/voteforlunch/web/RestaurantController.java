@@ -21,7 +21,7 @@ import static ru.proshkina.voteforlunch.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    static final String REST_URL = "/api/admin/restaurants";
+    static final String REST_URL = "/rest/admin/restaurants";
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private RestaurantService service;

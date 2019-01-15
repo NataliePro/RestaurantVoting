@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.proshkina.voteforlunch.AbstractControllerTest;
 import ru.proshkina.voteforlunch.DateTimeFactory;
-import ru.proshkina.voteforlunch.TestUtil;
 import ru.proshkina.voteforlunch.model.User;
 import ru.proshkina.voteforlunch.model.Vote;
 import ru.proshkina.voteforlunch.service.user.UserService;
@@ -15,7 +14,6 @@ import ru.proshkina.voteforlunch.service.vote.VoteTestData;
 import ru.proshkina.voteforlunch.to.UserTo;
 import ru.proshkina.voteforlunch.util.UserUtil;
 import ru.proshkina.voteforlunch.web.json.JsonUtil;
-import ru.proshkina.voteforlunch.web.user.ProfileController;
 
 import java.time.LocalTime;
 
@@ -45,13 +43,12 @@ class ProfileControllerTest extends AbstractControllerTest {
 
     @Test
     void testGet() throws Exception {
-        TestUtil.print(
-                mockMvc.perform(get(REST_URL)
-                        .with(userHttpBasic(USER)))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                        .andExpect(getUserMatcher(USER))
-        );
+        mockMvc.perform(get(REST_URL)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(getUserMatcher(USER));
     }
 
     @Test
@@ -137,18 +134,6 @@ class ProfileControllerTest extends AbstractControllerTest {
         } else {
             resultActions.andExpect(status().isUnprocessableEntity());
         }
-    }
-
-    @Test
-    void testGetUserVote() throws Exception {
-        mockMvc.perform(get(REST_URL + "/restaurants/" + RESTAURANT1_ID + "/votes")
-                .param("date", "2018-10-25")
-                .with(userHttpBasic(USER)))
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(result -> assertMatch(readFromJsonMvcResult(result, Vote.class)
-                        , VOTE3));
     }
 
     @Test

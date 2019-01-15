@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.proshkina</groupId>
     <artifactId>voteforlunch</artifactId>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <name>Vote for lunch</name>
@@ -18,7 +17,7 @@
         <spring.version>5.1.2.RELEASE</spring.version>
         <spring.security.version>5.1.1.RELEASE</spring.security.version>
         <spring-data-jpa.version>2.1.0.RELEASE</spring-data-jpa.version>
-        <jackson-json.version>2.9.7</jackson-json.version>
+        <jackson-json.version>2.9.8</jackson-json.version>
 
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
@@ -35,7 +34,7 @@
         <javax-el.version>3.0.1-b10</javax-el.version>
         <jsoup.version>1.11.3</jsoup.version>
 
-        <tomcat.version>9.0.12</tomcat.version>
+        <tomcat.version>9.0.14</tomcat.version>
 
         <!--Tools-->
         <ehcache.version>3.6.1</ehcache.version>
@@ -61,47 +60,6 @@
                 <version>2.22.1</version>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
-                </configuration>
-            </plugin>
-            <!--  http://stackoverflow.com/questions/4305935/is-it-possible-to-supply-tomcat6s-context-xml-file-via-the-maven-cargo-plugin#4417945 -->
-            <!-- https://codehaus-cargo.github.io/cargo/Tomcat+9.x.html -->
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.7.0</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat9x</containerId>
-                        <systemProperties>
-                            <file.encoding>UTF-8</file.encoding>
-                            <spring.profiles.active>tomcat,datajpa</spring.profiles.active>
-                        </systemProperties>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                            </dependency>
-                        </dependencies>
-                    </container>
-                    <configuration>
-                        <configfiles>
-                            <configfile>
-                                <file>src/main/resources/tomcat/context.xml</file>
-                                <todir>conf/Catalina/localhost/</todir>
-                                <tofile>context.xml.default</tofile>
-                            </configfile>
-                        </configfiles>
-                    </configuration>
-                    <deployables>
-                        <deployable>
-                            <groupId>ru.proshkina</groupId>
-                            <artifactId>voteforlunch</artifactId>
-                            <type>war</type>
-                            <properties>
-                                <context>${project.build.finalName}</context>
-                            </properties>
-                        </deployable>
-                    </deployables>
                 </configuration>
             </plugin>
         </plugins>
@@ -306,9 +264,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-    </profiles>
 
     <dependencyManagement>
         <dependencies>

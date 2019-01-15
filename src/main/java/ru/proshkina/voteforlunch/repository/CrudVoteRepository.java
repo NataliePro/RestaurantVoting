@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository.vote;
+package ru.proshkina.voteforlunch.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package ru.proshkina.voteforlunch.repository.user;
+package ru.proshkina.voteforlunch.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

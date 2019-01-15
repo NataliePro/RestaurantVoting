@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface VoteService {
 
-    Vote create(Vote vote, int user_id, int restaurant_id);
+    Vote createOrUpdate(Vote vote, int user_id, int restaurant_id);
 
     void delete(int id, int user_id);
 

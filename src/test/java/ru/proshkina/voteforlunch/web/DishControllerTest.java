@@ -63,7 +63,7 @@ class DishControllerTest extends AbstractControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        Dish created = new Dish(null, "Created restaurant", TEST_DATE, 5000);
+        Dish created = new Dish(null, "New dish", TEST_DATE, 5000);
         created.setRestaurant(RESTAURANT1);
         ResultActions actions = mockMvc.perform(post(REST_URL + RESTAURANT1_ID + "/dishes/")
                 .with(userHttpBasic(ADMIN))
@@ -84,7 +84,7 @@ class DishControllerTest extends AbstractControllerTest {
         Dish updated = new Dish(DISH1);
         updated.setName("Updated dish1");
         updated.setRestaurant(RESTAURANT1);
-        ResultActions actions = mockMvc.perform(put(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
+        mockMvc.perform(put(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))

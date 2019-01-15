@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping(ProfileController.REST_URL)
 public class ProfileController extends AbstractUserController {
-    static final String REST_URL = "/api/profile";
+    static final String REST_URL = "/rest/profile";
 
     @Autowired
     VoteService voteService;
@@ -75,17 +75,6 @@ public class ProfileController extends AbstractUserController {
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
-    }
-
-    @DeleteMapping("/restaurants/{restaurant_id}/votes/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteVote(@AuthenticationPrincipal AuthorizedUser authUser, @PathVariable("restaurant_id") int restaurant_id, @PathVariable("id") int id) {
-        voteService.delete(id, authUser.getId());
-    }
-
-    @GetMapping(value = "/restaurants/{restaurant_id}/votes", params = {"date"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Vote getUserVote(@AuthenticationPrincipal AuthorizedUser authUser, @PathVariable("restaurant_id") int restaurant_id, @RequestParam("date") LocalDate date) {
-        return voteService.getByRestaurantAndDateAndUser(restaurant_id, date, authUser.getId());
     }
 
     @GetMapping(value = "/restaurants/votes", params = {"date"}, produces = MediaType.APPLICATION_JSON_VALUE)

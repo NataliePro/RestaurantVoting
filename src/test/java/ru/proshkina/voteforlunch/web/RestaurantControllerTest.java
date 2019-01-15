@@ -68,6 +68,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(created)))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
         Restaurant returned = readFromJsonResultActions(actions, Restaurant.class);
@@ -86,6 +87,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
                 .andExpect(status().isNoContent());
 
         assertMatch(service.get(RESTAURANT1_ID), updated);
