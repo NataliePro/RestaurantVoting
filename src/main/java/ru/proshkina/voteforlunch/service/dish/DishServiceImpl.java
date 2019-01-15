@@ -42,7 +42,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public void delete(int id, int restaurant_id) {
-        checkNotFoundWithId(dishRepository.delete(id, restaurant_id), id);
+        checkNotFoundWithId(dishRepository.delete(id, restaurant_id) != 0, id);
     }
 
     @Transactional
@@ -50,9 +50,9 @@ public class DishServiceImpl implements DishService {
     public void update(Dish dish, int restaurant_id) {
         Assert.notNull(dish, "dish must not be null");
         int id = dish.getId();
-        Dish checkedDish = checkNotFoundWithId(get(id, restaurant_id), id);
-        checkedDish.setRestaurant(restaurantRepository.getOne(restaurant_id));
-        dishRepository.save(checkedDish);
+        checkNotFoundWithId(get(id, restaurant_id), id);
+        dish.setRestaurant(restaurantRepository.getOne(restaurant_id));
+        dishRepository.save(dish);
     }
 
     @Override

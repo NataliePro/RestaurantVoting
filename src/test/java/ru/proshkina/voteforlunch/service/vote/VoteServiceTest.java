@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.proshkina.voteforlunch.AbstractServiceTest;
 import ru.proshkina.voteforlunch.DateTimeFactory;
 import ru.proshkina.voteforlunch.model.Vote;
-import ru.proshkina.voteforlunch.repository.vote.VoteRepositoryImpl;
+import ru.proshkina.voteforlunch.repository.CrudRestaurantRepository;
+import ru.proshkina.voteforlunch.repository.CrudUserRepository;
+import ru.proshkina.voteforlunch.repository.CrudVoteRepository;
 import ru.proshkina.voteforlunch.util.exception.NotFoundException;
 import ru.proshkina.voteforlunch.util.exception.VotingTimeIsOutException;
 
@@ -18,10 +20,11 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.proshkina.voteforlunch.service.restaurant.RestaurantTestData.RESTAURANT1;
 import static ru.proshkina.voteforlunch.service.restaurant.RestaurantTestData.RESTAURANT1_ID;
-import static ru.proshkina.voteforlunch.service.user.UserTestData.ADMIN_ID;
-import static ru.proshkina.voteforlunch.service.user.UserTestData.USER_ID;
+import static ru.proshkina.voteforlunch.service.user.UserTestData.*;
 import static ru.proshkina.voteforlunch.service.vote.VoteTestData.*;
+import static ru.proshkina.voteforlunch.service.vote.VoteTestData.assertMatch;
 
 public class VoteServiceTest extends AbstractServiceTest {
 
@@ -32,7 +35,13 @@ public class VoteServiceTest extends AbstractServiceTest {
     private DateTimeFactory timeFactory;
 
     @Mock
-    private VoteRepositoryImpl mockRepository;
+    private CrudVoteRepository mockVoteRepository;
+
+    @Mock
+    private CrudRestaurantRepository mockRestaurantRepository;
+
+    @Mock
+    private CrudUserRepository mockUserRepository;
 
     @InjectMocks
     private VoteServiceImpl mockService;
@@ -48,10 +57,12 @@ public class VoteServiceTest extends AbstractServiceTest {
         when(timeFactory.getCurrentTime()).thenReturn(TEST_TIME_BEFORE_LIMIT);
         when(timeFactory.getCurrentDate()).thenReturn(TEST_DATE);
         when(timeFactory.getTimeLimit()).thenReturn(TEST_TIME_LIMIT);
-        when(mockRepository.save(newVote, ADMIN_ID, RESTAURANT1_ID)).thenReturn(newVote);
-        Vote createdVote = mockService.create(newVote, ADMIN_ID, RESTAURANT1_ID);
+        when(mockUserRepository.getOne(ADMIN_ID)).thenReturn(ADMIN);
+        when(mockRestaurantRepository.getOne(RESTAURANT1_ID)).thenReturn(RESTAURANT1);
+        when(mockVoteRepository.save(newVote)).thenReturn(newVote);
+        Vote createdVote = mockService.createOrUpdate(newVote, ADMIN_ID, RESTAURANT1_ID);
         assertMatch(createdVote, newVote);
-        verify(mockRepository).save(newVote, ADMIN_ID, RESTAURANT1_ID);
+        verify(mockVoteRepository).save(newVote);
     }
 
     @Test
@@ -61,7 +72,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         when(timeFactory.getCurrentDate()).thenReturn(TEST_DATE);
         when(timeFactory.getTimeLimit()).thenReturn(TEST_TIME_LIMIT);
         assertThrows(VotingTimeIsOutException.class, () ->
-                mockService.create(newVote, ADMIN_ID, RESTAURANT1_ID));
+                mockService.createOrUpdate(newVote, ADMIN_ID, RESTAURANT1_ID));
     }
 
     @Test

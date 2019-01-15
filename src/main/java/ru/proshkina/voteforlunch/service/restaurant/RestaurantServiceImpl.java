@@ -43,8 +43,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         int id = restaurant.getId();
-        Restaurant checkedRestaurant = checkNotFoundWithId(get(id),id);
-        restaurantRepository.save(checkedRestaurant);
+        checkNotFoundWithId(get(id), id);
+        restaurantRepository.save(restaurant);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void delete(int id) {
-        checkNotFoundWithId(restaurantRepository.delete(id), id);
+        checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
 
     @Override

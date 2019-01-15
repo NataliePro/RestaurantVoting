@@ -69,7 +69,7 @@ public class ProfileController extends AbstractUserController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<Vote> makeVote(@Valid @RequestBody Vote vote, @AuthenticationPrincipal AuthorizedUser authUser, @PathVariable("restaurant_id") int restaurant_id) {
 
-        Vote created = voteService.create(vote, authUser.getId(), restaurant_id);
+        Vote created = voteService.createOrUpdate(vote, authUser.getId(), restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/restaurants/{restaurant_id}/votes")
                 .buildAndExpand(created.getId()).toUri();
