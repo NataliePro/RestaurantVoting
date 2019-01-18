@@ -21,12 +21,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.proshkina.voteforlunch.TestUtil.*;
+import static ru.proshkina.voteforlunch.TestUtil.readFromJsonResultActions;
+import static ru.proshkina.voteforlunch.TestUtil.userHttpBasic;
 import static ru.proshkina.voteforlunch.service.restaurant.RestaurantTestData.*;
 import static ru.proshkina.voteforlunch.service.user.UserTestData.*;
 import static ru.proshkina.voteforlunch.service.user.UserTestData.assertMatch;
-import static ru.proshkina.voteforlunch.service.vote.VoteTestData.*;
-import static ru.proshkina.voteforlunch.service.vote.VoteTestData.assertMatch;
+import static ru.proshkina.voteforlunch.service.vote.VoteTestData.VOTE;
+import static ru.proshkina.voteforlunch.service.vote.VoteTestData.VOTE_ID;
 
 class ProfileControllerTest extends AbstractControllerTest {
 

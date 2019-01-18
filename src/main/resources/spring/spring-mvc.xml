@@ -9,10 +9,6 @@
 
     <bean class="ru.proshkina.voteforlunch.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <!-- serve static resources (*.html, ...) from src/main/webapp/ -->
-    <!--https://stackoverflow.com/a/44393203/548473-->
-    <!--<mvc:default-servlet-handler/>-->
-
     <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 
     <mvc:annotation-driven conversion-service="conversionService">
@@ -62,6 +58,4 @@
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="ru"/>
     </bean>
-
-
 </beans>

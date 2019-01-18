@@ -33,5 +33,4 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
 
     @EntityGraph(attributePaths = {"dishes"})
     List<Restaurant> findAllByDishes_DateOrderById(@Param("date") LocalDate date);
-
 }

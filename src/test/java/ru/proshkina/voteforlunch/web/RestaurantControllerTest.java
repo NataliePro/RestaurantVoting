@@ -103,5 +103,4 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class)
                         , RESTAURANT1, RESTAURANT2, RESTAURANT3, RESTAURANT4, RESTAURANT5));
     }
-
 }

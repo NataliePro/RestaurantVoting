@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(ProfileController.REST_URL)
+@RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController extends AbstractUserController {
     static final String REST_URL = "/rest/profile";
 
@@ -33,11 +33,10 @@ public class ProfileController extends AbstractUserController {
     @Autowired
     RestaurantService restaurantService;
 
-
     public ProfileController() {
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
         return super.get(authUser.getId());
     }
@@ -77,14 +76,13 @@ public class ProfileController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @GetMapping(value = "/restaurants/votes", params = {"date"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurants/votes", params = {"date"})
     public List<RestaurantTo> getVotesResultsForDate(@RequestParam("date") LocalDate date) {
         return restaurantService.getAllWithVotesByDate(date);
     }
 
-    @GetMapping(value = "/restaurants/dishes", params = {"date"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurants/dishes", params = {"date"})
     public List<Restaurant> getAllRestaurantsWithDishesForDate(@AuthenticationPrincipal AuthorizedUser authUser, @RequestParam("date") LocalDate date) {
         return restaurantService.getAllWithDishesByDate(date);
     }
-
 }

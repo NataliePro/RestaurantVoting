@@ -138,5 +138,4 @@ public class VoteServiceTest extends AbstractServiceTest {
     void testGetByRestaurantAndDateAndUser() {
         assertMatch(service.getByRestaurantAndDateAndUser(RESTAURANT1_ID, TEST_DATE, USER_ID), VOTE);
     }
-
 }

@@ -39,7 +39,6 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public Vote createOrUpdate(Vote vote, int user_id, int restaurant_id) {
         Assert.notNull(vote, "vote must not be null");
-
         LocalTime currentTime = dateTimeFactory.getCurrentTime();
         LocalDate currentDate = dateTimeFactory.getCurrentDate();
         LocalTime timeLimit = dateTimeFactory.getTimeLimit();

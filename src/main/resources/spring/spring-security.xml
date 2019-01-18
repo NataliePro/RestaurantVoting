@@ -15,7 +15,8 @@
         <csrf disabled="true"/>
     </http>
 
-    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder" factory-method="createDelegatingPasswordEncoder"/>
+    <beans:bean class="org.springframework.security.crypto.factory.PasswordEncoderFactories" id="passwordEncoder"
+                factory-method="createDelegatingPasswordEncoder"/>
 
     <http>
         <intercept-url pattern="/login" access="permitAll()"/>
@@ -24,11 +25,8 @@
         <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
 
-        <form-login login-page="/login" default-target-url="/meals"
-                    authentication-failure-url="/login?error=true"
-                    login-processing-url="/spring_security_check"/>
-        <logout logout-success-url="/login"/>
-        <!--<csrf disabled="true"/>-->
+        <form-login/>
+        <logout/>
     </http>
 
     <authentication-manager>

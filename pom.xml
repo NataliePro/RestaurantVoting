@@ -15,7 +15,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <spring.version>5.1.2.RELEASE</spring.version>
-        <spring.security.version>5.1.1.RELEASE</spring.security.version>
+        <spring.security.version>5.1.3.RELEASE</spring.security.version>
         <spring-data-jpa.version>2.1.0.RELEASE</spring-data-jpa.version>
         <jackson-json.version>2.9.8</jackson-json.version>
 
@@ -276,6 +276,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>

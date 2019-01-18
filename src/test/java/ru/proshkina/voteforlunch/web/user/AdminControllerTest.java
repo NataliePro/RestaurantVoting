@@ -116,5 +116,4 @@ class AdminControllerTest extends AbstractControllerTest {
         assertMatch(returned, expected);
         assertMatch(userService.getAll(), ADMIN, expected, USER, USER2, USER3);
     }
-
 }

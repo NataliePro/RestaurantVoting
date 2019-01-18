@@ -72,5 +72,4 @@ public class RestaurantController {
         log.info("get all restaurants");
         return service.getAll();
     }
-
 }

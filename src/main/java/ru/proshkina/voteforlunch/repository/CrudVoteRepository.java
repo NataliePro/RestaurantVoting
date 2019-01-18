@@ -47,6 +47,4 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> findAllByRestaurant_IdAndDateOrderByDateAscIdAsc(@Param("restaurant_id") int restaurant_id, @Param("date") LocalDate date);
 
     Vote findAllByRestaurant_IdAndDateAndUser_Id(@Param("restaurant_id") int restaurant_id, @Param("date") LocalDate date, @Param("user_id") int user_id);
-
-
 }

@@ -19,7 +19,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-mvc.xml"
 })
-//@Transactional
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 abstract public class AbstractControllerTest {
 

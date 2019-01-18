@@ -1,11 +1,13 @@
 package ru.proshkina.voteforlunch.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Entity
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {

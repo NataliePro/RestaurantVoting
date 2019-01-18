@@ -1,12 +1,14 @@
 package ru.proshkina.voteforlunch.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Entity
 @Table(name = "dishes")
 public class Dish extends AbstractNamedEntity {
