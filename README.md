@@ -15,3 +15,5 @@ A voting system for deciding where to have lunch.
     - If it is after 11:00 then it is too late, vote can't be changed
 
 Each restaurant provides new menu each day.
+
+[CURL commands](/config/curl.md)
