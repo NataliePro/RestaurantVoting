@@ -1,4 +1,4 @@
-DELETE FROM user_roles;
+DELETE FROM USER_ROLES;
 DELETE FROM dishes;
 DELETE FROM votes;
 DELETE FROM restaurants;
