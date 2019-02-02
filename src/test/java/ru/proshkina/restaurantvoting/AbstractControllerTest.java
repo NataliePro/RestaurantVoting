@@ -58,6 +58,6 @@ abstract public class AbstractControllerTest {
                         .operationPreprocessors()
                         .withResponseDefaults(prettyPrint()))
                 .build();
-        cacheManager.getCache("users").clear();
+        cacheManager.getCache("menu").clear();
     }
 }

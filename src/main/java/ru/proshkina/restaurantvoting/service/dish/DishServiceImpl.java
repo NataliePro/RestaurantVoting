@@ -1,6 +1,7 @@
 package ru.proshkina.restaurantvoting.service.dish;
 
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -25,6 +26,7 @@ public class DishServiceImpl implements DishService {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Transactional
     @Override
     public Dish create(Dish dish, int restaurantId) {
@@ -40,11 +42,13 @@ public class DishServiceImpl implements DishService {
         return checkNotFoundWithId(dish, id);
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Override
     public void delete(int id, int restaurantId) {
         checkNotFoundWithId(dishRepository.delete(id, restaurantId) != 0, id);
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Transactional
     @Override
     public void update(Dish dish, int restaurantId) {

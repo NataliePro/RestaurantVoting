@@ -1,5 +1,7 @@
 package ru.proshkina.restaurantvoting.service.restaurant;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +34,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         this.voteRepository = voteRepository;
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Override
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         return restaurantRepository.save(restaurant);
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Transactional
     @Override
     public void update(Restaurant restaurant) {
@@ -52,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     @Override
     public void delete(int id) {
         checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
@@ -62,6 +67,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findAll(SORT_ID);
     }
 
+    @Cacheable("menu")
     @Override
     public List<Restaurant> getAllWithDishesByDate(LocalDate date) {
         Assert.notNull(date, "date must not be null");

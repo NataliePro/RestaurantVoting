@@ -26,7 +26,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
+        cacheManager.getCache("menu").clear();
     }
 
     @Test
