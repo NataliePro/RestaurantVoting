@@ -11,7 +11,7 @@
         </encoder>
     </appender>
 
-    <logger name="ru.proshkina.voteforlunch" level="debug"/>
+    <logger name="ru.proshkina.restaurantvoting" level="debug"/>
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="debug"/>
     <logger name="org.springframework.security" level="debug"/>
 
